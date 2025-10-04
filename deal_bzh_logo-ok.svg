@@ -1,0 +1,71 @@
+<svg width="400" height="120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .outline-text {
+        fill: none;
+        stroke: black;
+        stroke-width: 3;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        font-size: 60px;
+      }
+      .double-line {
+        fill: none;
+        stroke: black;
+        stroke-width: 3;
+      }
+    </style>
+  </defs>
+  
+  <!-- D - Single line outline -->
+  <path d="M10 20 L10 100 M10 20 L35 20 Q50 20 50 35 L50 85 Q50 100 35 100 L10 100" class="outline-text"/>
+  
+  <!-- E - Double lines -->
+  <g>
+    <path d="M70 20 L70 100" class="double-line"/>
+    <path d="M78 20 L78 100" class="double-line"/>
+    <path d="M70 20 L110 20" class="double-line"/>
+    <path d="M70 28 L110 28" class="double-line"/>
+    <path d="M70 60 L100 60" class="double-line"/>
+    <path d="M70 68 L100 68" class="double-line"/>
+    <path d="M70 100 L110 100" class="double-line"/>
+    <path d="M70 92 L110 92" class="double-line"/>
+  </g>
+  
+  <!-- A - Single line outline -->
+  <path d="M120 100 L130 70 L150 70 L160 100 M125 20 L140 20 L155 85 M128 85 L152 85" class="outline-text"/>
+  
+  <!-- L - Double lines -->
+  <g>
+    <path d="M180 20 L180 100" class="double-line"/>
+    <path d="M188 20 L188 100" class="double-line"/>
+    <path d="M180 100 L220 100" class="double-line"/>
+    <path d="M180 92 L220 92" class="double-line"/>
+  </g>
+  
+  <!-- . - Single dot -->
+  <circle cx="235" cy="95" r="4" fill="black"/>
+  
+  <!-- B - Double lines -->
+  <g>
+    <path d="M260 20 L260 100" class="double-line"/>
+    <path d="M268 20 L268 100" class="double-line"/>
+    <path d="M260 20 L285 20 Q300 20 300 35 Q300 50 285 50 L260 50" class="double-line"/>
+    <path d="M268 28 L285 28 Q292 28 292 35 Q292 42 285 42 L268 42" class="double-line"/>
+    <path d="M260 50 L290 50 Q305 50 305 75 Q305 100 290 100 L260 100" class="double-line"/>
+    <path d="M268 58 L290 58 Q297 58 297 75 Q297 92 290 92 L268 92" class="double-line"/>
+  </g>
+  
+  <!-- Z - Single line outline -->
+  <path d="M325 20 L365 20 L325 100 L365 100" class="outline-text"/>
+  
+  <!-- H - Double lines -->
+  <g>
+    <path d="M385 20 L385 100" class="double-line"/>
+    <path d="M393 20 L393 100" class="double-line"/>
+    <path d="M415 20 L415 100" class="double-line"/>
+    <path d="M407 20 L407 100" class="double-line"/>
+    <path d="M385 60 L415 60" class="double-line"/>
+    <path d="M385 68 L415 68" class="double-line"/>
+  </g>
+</svg>
