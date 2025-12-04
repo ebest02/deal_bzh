@@ -1,41 +1,9 @@
 <h1>Une erreur est survenue</h1>
-<div class="alert alert-error">
-    <?php 
-    $exception = $this->exception;
-    $isDbError = false;
-    $dbMessage = '';
-    
-    if (class_exists('\Application\Service\DatabaseErrorHandler')) {
-        $isDbError = \Application\Service\DatabaseErrorHandler::isDatabaseError($exception);
-        $dbMessage = \Application\Service\DatabaseErrorHandler::getDatabaseErrorMessage($exception);
-    }
-    ?>
-    
-    <?php if ($isDbError): ?>
-        <h2>Erreur de base de données</h2>
-        <p><?= $this->escapeHtml($dbMessage) ?></p>
-        <p>Veuillez vérifier que :</p>
-        <ul>
-            <li>La base de données est créée</li>
-            <li>Les identifiants de connexion dans <code>config/autoload/local.php</code> sont corrects</li>
-            <li>Le serveur MySQL/MariaDB est démarré</li>
-            <li>L'utilisateur de la base de données a les permissions nécessaires</li>
-        </ul>
-    <?php else: ?>
-        <?php if ($this->displayExceptions): ?>
-            <h2>Exception:</h2>
-            <p><b><?= $this->escapeHtml($exception->getMessage()) ?></b></p>
-            <?php if ($exception->getFile()): ?>
-                <p><strong>Fichier:</strong> <?= $this->escapeHtml($exception->getFile()) ?></p>
-                <p><strong>Ligne:</strong> <?= $exception->getLine() ?></p>
-            <?php endif; ?>
-            <h3>Stack trace:</h3>
-            <pre><?= $this->escapeHtml($exception->getTraceAsString()) ?></pre>
-        <?php else: ?>
-            <p>Une erreur s'est produite. L'erreur a été enregistrée dans les logs.</p>
-            <p>Veuillez contacter l'administrateur si le problème persiste.</p>
-        <?php endif; ?>
-    <?php endif; ?>
-</div>
+<?php if ($this->displayExceptions): ?>
+    <h2>Exception:</h2>
+    <p><b><?= $this->exception->getMessage() ?></b></p>
+    <h3>Stack trace:</h3>
+    <pre><?= $this->exception->getTraceAsString() ?></pre>
+<?php endif; ?>
 <p><a href="<?= $this->url('home') ?>">Retour à l'accueil</a></p>
 
