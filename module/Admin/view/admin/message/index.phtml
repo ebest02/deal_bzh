@@ -1,0 +1,39 @@
+<h1>Messages</h1>
+
+<div class="filters">
+    <a href="<?= $this->url('admin/messages', [], ['query' => ['status' => 'all']]) ?>" class="btn <?= $this->status === 'all' ? 'btn-primary' : 'btn-secondary' ?>">Tous</a>
+    <a href="<?= $this->url('admin/messages', [], ['query' => ['status' => 'unread']]) ?>" class="btn <?= $this->status === 'unread' ? 'btn-primary' : 'btn-secondary' ?>">Non lus</a>
+    <a href="<?= $this->url('admin/messages', [], ['query' => ['status' => 'moderated']]) ?>" class="btn <?= $this->status === 'moderated' ? 'btn-primary' : 'btn-secondary' ?>">Modérés</a>
+</div>
+
+<?php if (count($this->messages) > 0): ?>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>De</th>
+                <th>À</th>
+                <th>Sujet</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->messages as $message): ?>
+                <tr>
+                    <td><?= $message->getId() ?></td>
+                    <td><?= $this->escapeHtml($message->getFromUser()->getFullName()) ?></td>
+                    <td><?= $this->escapeHtml($message->getToUser()->getFullName()) ?></td>
+                    <td><a href="<?= $this->url('admin/messages/view', ['id' => $message->getId()]) ?>"><?= $this->escapeHtml($message->getSubject()) ?></a></td>
+                    <td><?= $this->escapeHtml($message->getStatus()) ?></td>
+                    <td><?= $message->getCreatedAt()->format('d/m/Y H:i') ?></td>
+                    <td><a href="<?= $this->url('admin/messages/view', ['id' => $message->getId()]) ?>">Voir</a></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <p>Aucun message trouvé.</p>
+<?php endif; ?>
+

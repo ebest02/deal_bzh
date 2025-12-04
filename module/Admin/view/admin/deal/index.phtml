@@ -1,0 +1,47 @@
+<h1>Modération des annonces</h1>
+
+<div class="filters">
+    <a href="<?= $this->url('admin/deals', [], ['query' => ['status' => 'all']]) ?>" class="btn <?= $this->status === 'all' ? 'btn-primary' : 'btn-secondary' ?>">Toutes</a>
+    <a href="<?= $this->url('admin/deals', [], ['query' => ['status' => 'draft']]) ?>" class="btn <?= $this->status === 'draft' ? 'btn-primary' : 'btn-secondary' ?>">Brouillons</a>
+    <a href="<?= $this->url('admin/deals', [], ['query' => ['status' => 'published']]) ?>" class="btn <?= $this->status === 'published' ? 'btn-primary' : 'btn-secondary' ?>">Publiées</a>
+    <a href="<?= $this->url('admin/deals', [], ['query' => ['status' => 'moderated']]) ?>" class="btn <?= $this->status === 'moderated' ? 'btn-primary' : 'btn-secondary' ?>">Modérées</a>
+</div>
+
+<?php if (count($this->paginator) > 0): ?>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Statut</th>
+                <th>Créé le</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->paginator as $deal): ?>
+                <tr>
+                    <td><?= $deal->getId() ?></td>
+                    <td><a href="<?= $this->url('admin/deals/view', ['id' => $deal->getId()]) ?>"><?= $this->escapeHtml($deal->getTitle()) ?></a></td>
+                    <td><?= $this->escapeHtml($deal->getUser()->getFullName()) ?></td>
+                    <td><?= $this->escapeHtml($deal->getStatus()) ?></td>
+                    <td><?= $deal->getCreatedAt()->format('d/m/Y') ?></td>
+                    <td>
+                        <a href="<?= $this->url('admin/deals/view', ['id' => $deal->getId()]) ?>">Voir</a>
+                        | <a href="<?= $this->url('admin/deals/moderate', ['id' => $deal->getId()]) ?>">Modérer</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php if ($this->paginator->count() > 1): ?>
+        <div class="pagination">
+            <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'admin/deals']) ?>
+        </div>
+    <?php endif; ?>
+<?php else: ?>
+    <p>Aucune annonce trouvée.</p>
+<?php endif; ?>
+

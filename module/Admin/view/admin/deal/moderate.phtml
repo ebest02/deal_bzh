@@ -1,0 +1,28 @@
+<h1>Modérer l'annonce</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title"><?= $this->escapeHtml($this->deal->getTitle()) ?></h2>
+    </div>
+    <div class="card-body">
+        <p><strong>Auteur:</strong> <?= $this->escapeHtml($this->deal->getUser()->getFullName()) ?></p>
+        <p><strong>Statut actuel:</strong> <?= $this->escapeHtml($this->deal->getStatus()) ?></p>
+        <p><strong>Description:</strong></p>
+        <p><?= nl2br($this->escapeHtml($this->deal->getDescription())) ?></p>
+    </div>
+</div>
+
+<form method="post" action="<?= $this->url('admin/deals/moderate', ['id' => $this->deal->getId()]) ?>">
+    <div class="form-group">
+        <label>Action</label>
+        <select name="action" class="form-control" required>
+            <option value="">-- Sélectionner une action --</option>
+            <option value="approve">Approuver (publier)</option>
+            <option value="reject">Rejeter</option>
+            <option value="archive">Archiver</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Appliquer</button>
+    <a href="<?= $this->url('admin/deals') ?>" class="btn btn-secondary">Annuler</a>
+</form>
+

@@ -1,0 +1,55 @@
+<?php
+$this->headTitle('DEAL.BZH - Échange et partage de matériel');
+$this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <?= $this->headMeta() ?>
+    <?= $this->headTitle() ?>
+    <?= $this->headLink()->prependStylesheet($this->basePath('css/deal-bzh.css')) ?>
+    <?= $this->headScript() ?>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <a href="<?= $this->url('home') ?>">
+                    <img src="<?= $this->basePath('deal_bzh_logo-ok.svg') ?>" alt="DEAL.BZH" />
+                </a>
+            </div>
+            <nav class="main-nav">
+                <?php
+                $navigation = $this->navigation('default');
+                echo $this->navigation()->menu()->renderMenu($navigation);
+                ?>
+            </nav>
+            <div class="user-menu">
+                <?php if ($this->identity()): ?>
+                    <span class="user-name"><?= $this->escapeHtml($this->identity()->getEmail()) ?></span>
+                    <a href="<?= $this->url('user/logout') ?>">Déconnexion</a>
+                <?php else: ?>
+                    <a href="<?= $this->url('user/login') ?>">Connexion</a>
+                    <a href="<?= $this->url('user/register') ?>">Inscription</a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <?= $this->content ?>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; <?= date('Y') ?> DEAL.BZH - Plateforme d'échange et de partage de matériel</p>
+        </div>
+    </footer>
+
+    <?= $this->inlineScript() ?>
+</body>
+</html>
+

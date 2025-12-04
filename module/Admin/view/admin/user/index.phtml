@@ -1,0 +1,32 @@
+<h1>Gestion des utilisateurs</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Nom</th>
+            <th>Rôle</th>
+            <th>Actif</th>
+            <th>Inscrit le</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->users as $user): ?>
+            <tr>
+                <td><?= $user->getId() ?></td>
+                <td><?= $this->escapeHtml($user->getEmail()) ?></td>
+                <td><?= $this->escapeHtml($user->getFullName()) ?></td>
+                <td><?= $this->escapeHtml($user->getRole()) ?></td>
+                <td><?= $user->getIsActive() ? 'Oui' : 'Non' ?></td>
+                <td><?= $user->getCreatedAt()->format('d/m/Y') ?></td>
+                <td>
+                    <a href="<?= $this->url('admin/users/view', ['id' => $user->getId()]) ?>">Voir</a>
+                    | <a href="<?= $this->url('admin/users/edit', ['id' => $user->getId()]) ?>">Modifier</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+

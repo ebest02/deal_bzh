@@ -1,0 +1,41 @@
+<h1>Modifier mon profil</h1>
+
+<?php if ($this->flashMessenger()->hasMessages()): ?>
+    <div class="alert alert-success">
+        <?php foreach ($this->flashMessenger()->getMessages() as $message): ?>
+            <p><?= $this->escapeHtml($message) ?></p>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+<form method="post" action="<?= $this->url('user/edit-profile') ?>">
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" value="<?= $this->escapeHtml($this->user->getEmail()) ?>" disabled class="form-control" />
+        <small>L'email ne peut pas être modifié</small>
+    </div>
+
+    <div class="form-group">
+        <label for="first_name">Prénom</label>
+        <input type="text" name="first_name" id="first_name" value="<?= $this->escapeHtml($this->user->getFirstName()) ?>" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="last_name">Nom</label>
+        <input type="text" name="last_name" id="last_name" value="<?= $this->escapeHtml($this->user->getLastName()) ?>" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="phone">Téléphone</label>
+        <input type="text" name="phone" id="phone" value="<?= $this->escapeHtml($this->user->getPhone()) ?>" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+        <input type="password" name="password" id="password" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a href="<?= $this->url('user/profile') ?>" class="btn btn-secondary">Annuler</a>
+</form>
+

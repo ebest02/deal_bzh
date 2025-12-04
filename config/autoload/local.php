@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * Configuration locale de l'application
+ * 
+ * Copiez ce fichier vers local.php et modifiez les valeurs selon votre environnement
+ */
+
+return [
+    'db' => [
+        'driver' => 'Pdo_Mysql',
+        'database' => 'deal_bzh',
+        'username' => 'deal_bzh',
+        'password' => 'd6vIpjVOINqe',
+        'hostname' => 'localhost',
+        'port' => 3306,
+        'charset' => 'utf8mb4',
+        'options' => [
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        ],
+    ],
+    // Configuration du logging (optionnel)
+    'logging' => [
+        'enabled' => true,
+        'level' => 'DEBUG', // DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT, EMERGENCY
+    ],
+];

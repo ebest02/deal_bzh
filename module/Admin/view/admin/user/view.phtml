@@ -1,0 +1,18 @@
+<h1>Utilisateur: <?= $this->escapeHtml($this->user->getFullName()) ?></h1>
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>Email:</strong> <?= $this->escapeHtml($this->user->getEmail()) ?></p>
+        <p><strong>Prénom:</strong> <?= $this->escapeHtml($this->user->getFirstName() ?? 'N/A') ?></p>
+        <p><strong>Nom:</strong> <?= $this->escapeHtml($this->user->getLastName() ?? 'N/A') ?></p>
+        <p><strong>Téléphone:</strong> <?= $this->escapeHtml($this->user->getPhone() ?? 'N/A') ?></p>
+        <p><strong>Rôle:</strong> <?= $this->escapeHtml($this->user->getRole()) ?></p>
+        <p><strong>Actif:</strong> <?= $this->user->getIsActive() ? 'Oui' : 'Non' ?></p>
+        <p><strong>Note:</strong> <?= number_format($this->user->getRating(), 2) ?> / 5.00 (<?= $this->user->getRatingCount() ?> avis)</p>
+        <p><strong>Inscrit le:</strong> <?= $this->user->getCreatedAt()->format('d/m/Y à H:i') ?></p>
+    </div>
+</div>
+
+<p><a href="<?= $this->url('admin/users/edit', ['id' => $this->user->getId()]) ?>" class="btn btn-primary">Modifier</a></p>
+<p><a href="<?= $this->url('admin/users') ?>">Retour à la liste</a></p>
+

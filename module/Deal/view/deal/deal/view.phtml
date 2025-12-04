@@ -1,0 +1,95 @@
+<h1><?= $this->escapeHtml($this->deal->getTitle()) ?></h1>
+
+<?php if ($this->flashMessenger()->hasMessages()): ?>
+    <div class="alert alert-success">
+        <?php foreach ($this->flashMessenger()->getMessages() as $message): ?>
+            <p><?= $this->escapeHtml($message) ?></p>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>Catégorie:</strong> <?= $this->escapeHtml($this->deal->getCategory()->getName()) ?></p>
+        <p><strong>Type:</strong> 
+            <?php
+            $types = [
+                'exchange' => 'Échange',
+                'swap' => 'Troc',
+                'free_service' => 'Service gratuit',
+                'sale' => 'Vente',
+            ];
+            echo $types[$this->deal->getType()] ?? $this->deal->getType();
+            ?>
+        </p>
+        <?php if ($this->deal->getPrice()): ?>
+            <p><strong>Prix:</strong> <?= number_format($this->deal->getPrice(), 2) ?> €
+                <?php if ($this->deal->getIsNegotiable()): ?>
+                    <em>(négociable)</em>
+                <?php endif; ?>
+            </p>
+        <?php endif; ?>
+        <?php if ($this->deal->getLocation()): ?>
+            <p><strong>Localisation:</strong> <?= $this->escapeHtml($this->deal->getLocation()) ?></p>
+        <?php endif; ?>
+        <p><strong>Publié le:</strong> <?= $this->deal->getPublishedAt()->format('d/m/Y à H:i') ?></p>
+        <p><strong>Vues:</strong> <?= $this->deal->getViews() ?></p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Description</h2>
+    </div>
+    <div class="card-body">
+        <p><?= nl2br($this->escapeHtml($this->deal->getDescription())) ?></p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Contact</h2>
+    </div>
+    <div class="card-body">
+        <p><strong>Publié par:</strong> <?= $this->escapeHtml($this->deal->getUser()->getFullName()) ?></p>
+        <p><a href="<?= $this->url('message/create', ['deal_id' => $this->deal->getId()]) ?>" class="btn btn-primary">Contacter l'annonceur</a></p>
+    </div>
+</div>
+
+<?php if ($this->identity()): ?>
+    <p>
+        <a href="<?= $this->url('deal/favorite', ['id' => $this->deal->getId()]) ?>" class="btn btn-secondary">
+            <?= $this->isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris' ?>
+        </a>
+    </p>
+    
+    <?php if ($this->identity()->getId() !== $this->deal->getUserId()): ?>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Noter l'annonceur</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" action="<?= $this->url('user/rating') ?>">
+                    <input type="hidden" name="deal_id" value="<?= $this->deal->getId() ?>" />
+                    <div class="form-group">
+                        <label>Note (1-5)</label>
+                        <select name="score" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Commentaire (optionnel)</label>
+                        <textarea name="comment" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Noter</button>
+                </form>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
+
