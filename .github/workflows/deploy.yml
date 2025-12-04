@@ -1,0 +1,105 @@
+name: Build and Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+env:
+  REGISTRY: YOUR_REGISTRY  # CHANGEZ: Docker registry (ex: ghcr.io, docker.io, etc.)
+  IMAGE_NAME: deal-bzh
+  KUBERNETES_NAMESPACE: deal-bzh
+  KUBERNETES_CONTEXT: YOUR_KUBERNETES_CONTEXT  # CHANGEZ: Nom du contexte Kubernetes
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+    - name: Output image digest
+      run: echo "Image pushed with digest: ${{ steps.build.outputs.digest }}"
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Configure kubectl
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig.yml
+        export KUBECONFIG=./kubeconfig.yml
+        kubectl config use-context ${{ env.KUBERNETES_CONTEXT }}
+
+    - name: Update image tag in kustomization
+      run: |
+        cd kubernetes
+        # Mettre à jour l'image avec le tag du commit
+        IMAGE_TAG="${{ github.sha }}"
+        sed -i "s|newTag:.*|newTag: ${IMAGE_TAG}|g" kustomization.yaml
+        sed -i "s|YOUR_REGISTRY|${{ env.REGISTRY }}|g" kustomization.yaml
+
+    - name: Deploy to Kubernetes
+      run: |
+        export KUBECONFIG=./kubeconfig.yml
+        kubectl config use-context ${{ env.KUBERNETES_CONTEXT }}
+        kubectl apply -k kubernetes/
+        kubectl rollout status deployment/deal-bzh-app -n ${{ env.KUBERNETES_NAMESPACE }} --timeout=5m
+        kubectl rollout status deployment/deal-bzh-nginx -n ${{ env.KUBERNETES_NAMESPACE }} --timeout=5m
+
+    - name: Verify deployment
+      run: |
+        export KUBECONFIG=./kubeconfig.yml
+        kubectl get pods -n ${{ env.KUBERNETES_NAMESPACE }}
+        kubectl get services -n ${{ env.KUBERNETES_NAMESPACE }}
+
+

@@ -76,6 +76,10 @@ class ComposerStaticInit073c916bf648d1a8311efa07d1dc6908
             'Laminas\\Cache\\' => 14,
             'Laminas\\Authentication\\' => 23,
         ),
+        'F' => 
+        array (
+            'Forum\\' => 6,
+        ),
         'D' => 
         array (
             'Deal\\' => 5,
@@ -267,6 +271,10 @@ class ComposerStaticInit073c916bf648d1a8311efa07d1dc6908
         'Laminas\\Authentication\\' => 
         array (
             0 => __DIR__ . '/..' . '/laminas/laminas-authentication/src',
+        ),
+        'Forum\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/module/Forum/src',
         ),
         'Deal\\' => 
         array (

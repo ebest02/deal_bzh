@@ -3,7 +3,7 @@
         'name' => 'deal-bzh/application',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '81fecabd82b90c41a7d19cf75c00dc0e90efbe92',
+        'reference' => '36bbd27ad4c991e9dbb3ac990d611179a384836f',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -28,7 +28,7 @@
         'deal-bzh/application' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '81fecabd82b90c41a7d19cf75c00dc0e90efbe92',
+            'reference' => '36bbd27ad4c991e9dbb3ac990d611179a384836f',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

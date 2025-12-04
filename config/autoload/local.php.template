@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * Configuration locale de l'application
+ * 
+ * Ce fichier sera généré depuis les variables d'environnement dans Kubernetes
+ */
+
+return [
+    'db' => [
+        'driver' => 'Pdo_Mysql',
+        'database' => getenv('DB_NAME') ?: 'deal_bzh',
+        'username' => getenv('DB_USER') ?: 'deal_bzh',
+        'password' => getenv('DB_PASSWORD') ?: '',
+        'hostname' => getenv('DB_HOST') ?: 'localhost',
+        'port' => (int)(getenv('DB_PORT') ?: 3306),
+        'charset' => 'utf8mb4',
+        'options' => [
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+        ],
+    ],
+    'logging' => [
+        'enabled' => true,
+        'level' => getenv('LOG_LEVEL') ?: 'INFO',
+    ],
+];
+
+

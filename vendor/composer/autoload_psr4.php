@@ -50,6 +50,7 @@ return array(
     'Laminas\\Cache\\Storage\\Adapter\\' => array($vendorDir . '/laminas/laminas-cache-storage-adapter-filesystem/src'),
     'Laminas\\Cache\\' => array($vendorDir . '/laminas/laminas-cache/src'),
     'Laminas\\Authentication\\' => array($vendorDir . '/laminas/laminas-authentication/src'),
+    'Forum\\' => array($baseDir . '/module/Forum/src'),
     'Deal\\' => array($baseDir . '/module/Deal/src'),
     'Brick\\VarExporter\\' => array($vendorDir . '/brick/varexporter/src'),
     'Application\\' => array($baseDir . '/module/Application/src'),
