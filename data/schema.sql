@@ -141,6 +141,69 @@ CREATE TABLE IF NOT EXISTS `ratings` (
     FOREIGN KEY (`deal_id`) REFERENCES `deals` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Table du forum (tutoriels)
+CREATE TABLE IF NOT EXISTS `forum_categories` (
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    `slug` VARCHAR(100) NOT NULL,
+    `description` TEXT DEFAULT NULL,
+    `order` INT(11) DEFAULT 0,
+    `is_active` TINYINT(1) DEFAULT 1,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `slug` (`slug`),
+    KEY `is_active` (`is_active`),
+    KEY `order` (`order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Table des sujets du forum
+CREATE TABLE IF NOT EXISTS `forum_topics` (
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `category_id` INT(11) UNSIGNED NOT NULL,
+    `user_id` INT(11) UNSIGNED NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `content` TEXT NOT NULL,
+    `is_pinned` TINYINT(1) DEFAULT 0,
+    `is_locked` TINYINT(1) DEFAULT 0,
+    `views` INT(11) DEFAULT 0,
+    `replies_count` INT(11) DEFAULT 0,
+    `last_reply_at` TIMESTAMP NULL DEFAULT NULL,
+    `last_reply_user_id` INT(11) UNSIGNED DEFAULT NULL,
+    `status` ENUM('draft', 'published', 'moderated', 'archived') NOT NULL DEFAULT 'published',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `category_id` (`category_id`),
+    KEY `user_id` (`user_id`),
+    KEY `status` (`status`),
+    KEY `is_pinned` (`is_pinned`),
+    KEY `last_reply_at` (`last_reply_at`),
+    FULLTEXT KEY `search` (`title`, `content`),
+    FOREIGN KEY (`category_id`) REFERENCES `forum_categories` (`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`last_reply_user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Table des messages du forum
+CREATE TABLE IF NOT EXISTS `forum_posts` (
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `topic_id` INT(11) UNSIGNED NOT NULL,
+    `user_id` INT(11) UNSIGNED NOT NULL,
+    `content` TEXT NOT NULL,
+    `is_first_post` TINYINT(1) DEFAULT 0,
+    `status` ENUM('published', 'moderated', 'deleted') NOT NULL DEFAULT 'published',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `topic_id` (`topic_id`),
+    KEY `user_id` (`user_id`),
+    KEY `status` (`status`),
+    KEY `created_at` (`created_at`),
+    FOREIGN KEY (`topic_id`) REFERENCES `forum_topics` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Insertion des catégories de base
 INSERT INTO `categories` (`name`, `slug`, `description`) VALUES
 ('Sonorisation', 'sonorisation', 'Matériel de sonorisation, enceintes, amplis, micros, etc.'),
@@ -148,4 +211,12 @@ INSERT INTO `categories` (`name`, `slug`, `description`) VALUES
 ('Informatique Old School', 'informatique-old-school', 'Ordinateurs rétro, périphériques vintage, etc.'),
 ('Éclairage', 'eclairage', 'Matériel d''éclairage scénique, projecteurs, etc.'),
 ('Accessoires', 'accessoires', 'Câbles, supports, accessoires divers');
+
+-- Insertion des catégories du forum
+INSERT INTO `forum_categories` (`name`, `slug`, `description`, `order`) VALUES
+('Tutoriels Sonorisation', 'tutoriels-sonorisation', 'Tutoriels et guides sur le matériel de sonorisation', 1),
+('Tutoriels Vidéo', 'tutoriels-video', 'Tutoriels et guides sur le matériel vidéo', 2),
+('Tutoriels Informatique', 'tutoriels-informatique', 'Tutoriels et guides sur l''informatique old school', 3),
+('Astuces et Conseils', 'astuces-conseils', 'Astuces et conseils généraux', 4),
+('Questions/Réponses', 'questions-reponses', 'Posez vos questions, partagez vos réponses', 5);
 

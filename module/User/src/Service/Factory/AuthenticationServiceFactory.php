@@ -9,7 +9,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class AuthenticationServiceFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $sessionManager = $container->get(\Laminas\Session\SessionManager::class);
         $storage = new Session(null, null, $sessionManager);

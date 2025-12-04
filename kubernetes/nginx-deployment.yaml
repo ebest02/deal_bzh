@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deal-bzh-nginx
+  labels:
+    app: deal-bzh
+    component: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: deal-bzh
+      component: nginx
+  template:
+    metadata:
+      labels:
+        app: deal-bzh
+        component: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: http
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+        - name: app-files
+          mountPath: /var/www/html
+          readOnly: true
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: deal-bzh-nginx-config
+      - name: app-files
+        emptyDir: {}
+        # Note: En production, utilisez un volume partagé ou un initContainer pour copier les fichiers
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deal-bzh-nginx
+  labels:
+    app: deal-bzh
+    component: nginx
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: deal-bzh
+    component: nginx
+
+

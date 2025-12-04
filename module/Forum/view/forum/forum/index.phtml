@@ -1,0 +1,28 @@
+<h1>Forum - Tutoriels</h1>
+
+<p class="lead">Partagez vos connaissances et apprenez des autres membres de la communauté.</p>
+
+<div class="forum-categories">
+    <?php foreach ($this->categories as $category): ?>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <a href="<?= $this->url('forum/category', ['slug' => $category->getSlug()]) ?>">
+                        <?= $this->escapeHtml($category->getName()) ?>
+                    </a>
+                </h2>
+            </div>
+            <div class="card-body">
+                <?php if ($category->getDescription()): ?>
+                    <p><?= $this->escapeHtml($category->getDescription()) ?></p>
+                <?php endif; ?>
+                <p><small><?= $category->getTopicsCount() ?> sujets, <?= $category->getPostsCount() ?> messages</small></p>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<?php if ($this->identity()): ?>
+    <p><a href="<?= $this->url('forum/topic/create') ?>" class="btn btn-primary">Créer un nouveau sujet</a></p>
+<?php endif; ?>
+

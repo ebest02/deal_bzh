@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deal-bzh-config
+  labels:
+    app: deal-bzh
+data:
+  app-env: "production"
+  app-name: "DEAL.BZH"
+  session-name: "deal_bzh_session"
+  session-lifetime: "7200"
+  log-level: "INFO"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deal-bzh-nginx-config
+  labels:
+    app: deal-bzh
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name _;
+        root /var/www/html/public;
+        index index.php;
+
+        client_max_body_size 20M;
+
+        location /health {
+            access_log off;
+            return 200 "healthy\n";
+            add_header Content-Type text/plain;
+        }
+
+        location / {
+            try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+            fastcgi_pass deal-bzh-php-fpm:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+            fastcgi_read_timeout 300;
+        }
+
+        location ~ /\. {
+            deny all;
+        }
+
+        location ~* \.(jpg|jpeg|gif|png|css|js|ico|svg|woff|woff2|ttf|eot)$ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+    }
+
+

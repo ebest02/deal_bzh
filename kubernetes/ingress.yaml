@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: deal-bzh-ingress
+  labels:
+    app: deal-bzh
+  annotations:
+    # Exemple pour cert-manager (ajustez selon votre configuration)
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: deal.bzh  # CHANGEZ selon votre domaine
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: deal-bzh-nginx
+            port:
+              number: 80
+  # Décommentez pour activer TLS
+  # tls:
+  # - hosts:
+  #   - deal.bzh
+  #   secretName: deal-bzh-tls
+
+

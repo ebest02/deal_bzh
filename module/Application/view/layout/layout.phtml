@@ -20,19 +20,44 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
                 </a>
             </div>
             <nav class="main-nav">
-                <?php
-                $navigation = $this->navigation('default');
-                echo $this->navigation()->menu()->renderMenu($navigation);
-                ?>
+                <ul>
+                    <li><a href="<?= $this->url('home') ?>">Accueil</a></li>
+                    <li><a href="<?= $this->url('deal') ?>">Annonces</a></li>
+                    <li><a href="<?= $this->url('forum') ?>">Forum</a></li>
+                    <?php 
+                    try {
+                        $identity = $this->identity();
+                        if ($identity): ?>
+                        <li><a href="<?= $this->url('deal/create') ?>">Déposer une annonce</a></li>
+                        <li><a href="<?= $this->url('message') ?>">Mes messages</a></li>
+                        <?php if (method_exists($identity, 'isAdmin') && $identity->isAdmin()): ?>
+                            <li><a href="<?= $this->url('admin') ?>">Administration</a></li>
+                        <?php endif; ?>
+                    <?php 
+                        endif;
+                    } catch (\Exception $e) {
+                        // AuthenticationService non disponible, continuer sans menu utilisateur
+                    }
+                    ?>
+                </ul>
             </nav>
             <div class="user-menu">
-                <?php if ($this->identity()): ?>
-                    <span class="user-name"><?= $this->escapeHtml($this->identity()->getEmail()) ?></span>
-                    <a href="<?= $this->url('user/logout') ?>">Déconnexion</a>
-                <?php else: ?>
+                <?php 
+                try {
+                    $identity = $this->identity();
+                    if ($identity): ?>
+                        <span class="user-name"><?= $this->escapeHtml(method_exists($identity, 'getEmail') ? $identity->getEmail() : 'Utilisateur') ?></span>
+                        <a href="<?= $this->url('user/logout') ?>">Déconnexion</a>
+                    <?php else: ?>
+                        <a href="<?= $this->url('user/login') ?>">Connexion</a>
+                        <a href="<?= $this->url('user/register') ?>">Inscription</a>
+                    <?php endif;
+                } catch (\Exception $e) {
+                    // AuthenticationService non disponible, afficher les liens de connexion
+                    ?>
                     <a href="<?= $this->url('user/login') ?>">Connexion</a>
                     <a href="<?= $this->url('user/register') ?>">Inscription</a>
-                <?php endif; ?>
+                <?php } ?>
             </div>
         </div>
     </header>

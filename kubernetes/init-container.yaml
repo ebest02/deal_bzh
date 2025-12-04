@@ -1,0 +1,19 @@
+# InitContainer pour copier les fichiers de l'application dans un volume partagé
+# À ajouter dans le deployment.yaml si vous utilisez un volume partagé
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: deal-bzh-init-script
+  labels:
+    app: deal-bzh
+data:
+  copy-app.sh: |
+    #!/bin/sh
+    set -e
+    echo "Copying application files..."
+    cp -r /app-source/* /app-destination/
+    chown -R www-data:www-data /app-destination
+    echo "Files copied successfully"
+
+

@@ -3,26 +3,35 @@
 /**
  * Configuration locale de l'application
  * 
- * Copiez ce fichier vers local.php et modifiez les valeurs selon votre environnement
+ * Utilise les variables d'environnement depuis .env
  */
+
+// Charger les variables d'environnement si disponible
+if (file_exists(__DIR__ . '/../../.env') && class_exists(\Application\Config\EnvLoader::class)) {
+    \Application\Config\EnvLoader::load();
+}
+
+// Fonction helper pour récupérer les variables d'environnement
+$getEnv = function($key, $default = null) {
+    return getenv($key) ?: ($_ENV[$key] ?? $_SERVER[$key] ?? $default);
+};
 
 return [
     'db' => [
         'driver' => 'Pdo_Mysql',
-        'database' => 'deal_bzh',
-        'username' => 'deal_bzh',
-        'password' => 'd6vIpjVOINqe',
-        'hostname' => 'localhost',
-        'port' => 3306,
+        'database' => $getEnv('DB_NAME', 'deal_bzh'),
+        'username' => $getEnv('DB_USER', 'deal_bzh'),
+        'password' => $getEnv('DB_PASSWORD', ''),
+        'hostname' => $getEnv('DB_HOST', 'localhost'),
+        'port' => (int)$getEnv('DB_PORT', 3306),
         'charset' => 'utf8mb4',
         'options' => [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
         ],
     ],
-    // Configuration du logging (optionnel)
     'logging' => [
         'enabled' => true,
-        'level' => 'DEBUG', // DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT, EMERGENCY
+        'level' => $getEnv('LOG_LEVEL', 'INFO'),
     ],
 ];

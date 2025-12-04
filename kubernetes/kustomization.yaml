@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: deal-bzh  # CHANGEZ selon votre namespace
+
+resources:
+  - deployment.yaml
+  - nginx-deployment.yaml
+  - configmap.yaml
+  - ingress.yaml
+  # - mysql-deployment.yaml  # Décommentez si vous utilisez MySQL dans Kubernetes
+  # - secret.yaml  # Créez secret.yaml depuis secret.yaml.example
+
+commonLabels:
+  app: deal-bzh
+
+images:
+  - name: YOUR_REGISTRY/deal-bzh
+    newTag: latest  # Sera remplacé par le tag du build
+
+

@@ -1,0 +1,174 @@
+name: Build and Deploy to Kubernetes
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+env:
+  # Ces valeurs peuvent être surchargées par les secrets GitHub
+  # Configurez-les dans Settings > Secrets and variables > Actions
+  REGISTRY: ${{ secrets.DOCKER_REGISTRY || 'ghcr.io' }}
+  IMAGE_NAME: deal-bzh
+  KUBERNETES_NAMESPACE: ${{ secrets.KUBERNETES_NAMESPACE || 'deal-bzh' }}
+  KUBERNETES_CONTEXT: ${{ secrets.KUBERNETES_CONTEXT || 'default' }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=sha,prefix={{branch}}-
+          type=raw,value=latest,enable={{is_default_branch}}
+
+    - name: Build and push Docker image
+      id: build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        file: ./Dockerfile
+
+    - name: Output image digest
+      run: echo "Image pushed with digest: ${{ steps.build.outputs.digest }}"
+      if: steps.build.outputs.digest != ''
+
+    - name: Set image tag output
+      id: image
+      run: |
+        # Utiliser le tag SHA pour la version
+        IMAGE_TAG="${{ github.sha }}"
+        IMAGE_FULL="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
+        echo "tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+        echo "full=${IMAGE_FULL}" >> $GITHUB_OUTPUT
+        echo "Image tag: ${IMAGE_TAG}"
+        echo "Image full: ${IMAGE_FULL}"
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: 'latest'
+
+    - name: Install kustomize
+      run: |
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+        sudo mv kustomize /usr/local/bin/
+        kustomize version
+
+    - name: Configure kubectl
+      run: |
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig.yml
+        export KUBECONFIG=./kubeconfig.yml
+        kubectl config use-context ${{ env.KUBERNETES_CONTEXT }}
+        kubectl cluster-info
+
+    - name: Create namespace if not exists
+      run: |
+        export KUBECONFIG=./kubeconfig.yml
+        kubectl create namespace ${{ env.KUBERNETES_NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: Update image tag in kustomization
+      run: |
+        cd kubernetes
+        # Mettre à jour l'image avec le tag du commit
+        IMAGE_TAG="${{ github.sha }}"
+        IMAGE_NAME="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+        
+        # Mettre à jour le tag dans kustomization.yaml
+        sed -i "s|newTag:.*|newTag: ${IMAGE_TAG}|g" kustomization.yaml
+        sed -i "s|YOUR_REGISTRY/deal-bzh|${IMAGE_NAME}|g" kustomization.yaml
+        
+        # Mettre à jour l'image dans deployment.yaml
+        sed -i "s|image:.*deal-bzh.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
+        
+        echo "Updated image to: ${IMAGE_NAME}:${IMAGE_TAG}"
+        cat kustomization.yaml
+
+    - name: Build kustomize manifests
+      run: |
+        cd kubernetes
+        kustomize build . > /tmp/k8s-manifests.yaml
+        echo "Generated manifests:"
+        head -50 /tmp/k8s-manifests.yaml
+
+    - name: Deploy to Kubernetes
+      run: |
+        export KUBECONFIG=./kubeconfig.yml
+        kubectl config use-context ${{ env.KUBERNETES_CONTEXT }}
+        
+        # Appliquer les manifests avec kustomize
+        cd kubernetes
+        kubectl apply -k .
+        
+        # Attendre que les déploiements soient prêts
+        echo "Waiting for deployments to be ready..."
+        kubectl rollout status deployment/deal-bzh-app -n ${{ env.KUBERNETES_NAMESPACE }} --timeout=5m || true
+        kubectl rollout status deployment/deal-bzh-nginx -n ${{ env.KUBERNETES_NAMESPACE }} --timeout=5m || true
+
+    - name: Verify deployment
+      run: |
+        export KUBECONFIG=./kubeconfig.yml
+        echo "=== Pods ==="
+        kubectl get pods -n ${{ env.KUBERNETES_NAMESPACE }} -o wide
+        echo ""
+        echo "=== Services ==="
+        kubectl get services -n ${{ env.KUBERNETES_NAMESPACE }}
+        echo ""
+        echo "=== Deployments ==="
+        kubectl get deployments -n ${{ env.KUBERNETES_NAMESPACE }}
+        echo ""
+        echo "=== Ingress ==="
+        kubectl get ingress -n ${{ env.KUBERNETES_NAMESPACE }} || echo "No ingress found"
+
+    - name: Check pod logs on failure
+      if: failure()
+      run: |
+        export KUBECONFIG=./kubeconfig.yml
+        echo "=== App Pod Logs ==="
+        kubectl logs -n ${{ env.KUBERNETES_NAMESPACE }} -l app=deal-bzh,component=web --tail=50 || true
+        echo ""
+        echo "=== Nginx Pod Logs ==="
+        kubectl logs -n ${{ env.KUBERNETES_NAMESPACE }} -l app=deal-bzh,component=nginx --tail=50 || true
+
+

@@ -3,7 +3,7 @@
 return [
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
+            \Application\Controller\IndexController::class => \Application\Controller\Factory\IndexControllerFactory::class,
         ],
     ],
     'router' => [
@@ -13,7 +13,7 @@ return [
                 'options' => [
                     'route' => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => \Application\Controller\IndexController::class,
                         'action' => 'index',
                     ],
                 ],
@@ -38,6 +38,7 @@ return [
     'service_manager' => [
         'factories' => [
             \Laminas\Session\SessionManager::class => \Laminas\Session\Service\SessionManagerFactory::class,
+            \Application\Service\Logger::class => \Application\Service\Factory\LoggerFactory::class,
         ],
     ],
 ];

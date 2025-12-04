@@ -1,0 +1,65 @@
+<h1><?= $this->escapeHtml($this->topic->getTitle()) ?></h1>
+
+<?php if ($this->flashMessenger()->hasMessages()): ?>
+    <div class="alert alert-success">
+        <?php foreach ($this->flashMessenger()->getMessages() as $message): ?>
+            <p><?= $this->escapeHtml($message) ?></p>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+<div class="topic-info">
+    <p>
+        <strong>Catégorie:</strong> 
+        <a href="<?= $this->url('forum/category', ['slug' => $this->topic->getCategory()->getSlug()]) ?>">
+            <?= $this->escapeHtml($this->topic->getCategory()->getName()) ?>
+        </a>
+    </p>
+    <p><strong>Créé par:</strong> <?= $this->topic->getUser() ? $this->escapeHtml($this->topic->getUser()->getFullName()) : 'Utilisateur inconnu' ?></p>
+    <p><strong>Vues:</strong> <?= $this->topic->getViews() ?></p>
+    <p><strong>Réponses:</strong> <?= $this->topic->getRepliesCount() ?></p>
+</div>
+
+<div class="posts-list">
+    <?php foreach ($this->paginator as $post): ?>
+        <div class="card post-card">
+            <div class="card-header">
+                <div class="post-author">
+                    <strong><?= $post->getUser() ? $this->escapeHtml($post->getUser()->getFullName()) : 'Utilisateur inconnu' ?></strong>
+                    <small><?= $post->getCreatedAt()->format('d/m/Y à H:i') ?></small>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><?= nl2br($this->escapeHtml($post->getContent())) ?></p>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<?php if ($this->paginator->count() > 1): ?>
+    <div class="pagination">
+        <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'forum/topic', 'params' => ['id' => $this->topic->getId()]]) ?>
+    </div>
+<?php endif; ?>
+
+<?php if ($this->identity() && !$this->topic->getIsLocked()): ?>
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Répondre</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="<?= $this->url('forum/topic/reply', ['topicId' => $this->topic->getId()]) ?>">
+                <div class="form-group">
+                    <label>Votre message</label>
+                    <textarea name="content" class="form-control" rows="10" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Répondre</button>
+            </form>
+        </div>
+    </div>
+<?php elseif ($this->topic->getIsLocked()): ?>
+    <p class="alert alert-info">Ce sujet est verrouillé.</p>
+<?php else: ?>
+    <p><a href="<?= $this->url('user/login') ?>" class="btn btn-primary">Connectez-vous pour répondre</a></p>
+<?php endif; ?>
+

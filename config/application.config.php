@@ -21,6 +21,7 @@ return [
         'Deal',
         'Message',
         'Admin',
+        'Forum',
     ],
     'module_listener_options' => [
         'module_paths' => [
