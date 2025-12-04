@@ -9,20 +9,19 @@ return [
         'hostname' => 'localhost',
         'charset' => 'utf8mb4',
     ],
-    'session' => [
-        'config' => [
-            'class' => \Laminas\Session\Config\SessionConfig::class,
-            'options' => [
-                'name' => 'deal_bzh_session',
-                'cookie_lifetime' => 7200,
-                'gc_maxlifetime' => 7200,
-            ],
+    'session_config' => [
+        'options' => [
+            'name' => 'deal_bzh_session',
+            'cookie_lifetime' => 7200,
+            'gc_maxlifetime' => 7200,
         ],
-        'storage' => \Laminas\Session\Storage\SessionArrayStorage::class,
-        'validators' => [
-            \Laminas\Session\Validator\RemoteAddr::class,
-            \Laminas\Session\Validator\HttpUserAgent::class,
-        ],
+    ],
+    'session_storage' => [
+        'type' => \Laminas\Session\Storage\SessionArrayStorage::class,
+    ],
+    'session_validators' => [
+        \Laminas\Session\Validator\RemoteAddr::class,
+        \Laminas\Session\Validator\HttpUserAgent::class,
     ],
     'view_manager' => [
         'display_not_found_reason' => true,
@@ -41,6 +40,7 @@ return [
             __DIR__ . '/../../module/Deal/view',
             __DIR__ . '/../../module/Message/view',
             __DIR__ . '/../../module/Admin/view',
+            __DIR__ . '/../../module/Forum/view',
         ],
     ],
     'router' => [
@@ -87,6 +87,7 @@ return [
     'service_manager' => [
         'factories' => [
             \Laminas\Db\Adapter\AdapterInterface::class => \Laminas\Db\Adapter\AdapterServiceFactory::class,
+            \Laminas\Authentication\AuthenticationService::class => \User\Service\Factory\AuthenticationServiceFactory::class,
         ],
     ],
 ];

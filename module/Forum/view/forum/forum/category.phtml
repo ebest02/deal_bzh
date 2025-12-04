@@ -1,0 +1,61 @@
+<h1><?= $this->escapeHtml($this->category->getName()) ?></h1>
+
+<?php if ($this->category->getDescription()): ?>
+    <p><?= $this->escapeHtml($this->category->getDescription()) ?></p>
+<?php endif; ?>
+
+<?php if ($this->identity()): ?>
+    <p><a href="<?= $this->url('forum/topic/create') ?>" class="btn btn-primary">Créer un nouveau sujet</a></p>
+<?php endif; ?>
+
+<div class="topics-list">
+    <?php if (count($this->paginator) > 0): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sujet</th>
+                    <th>Auteur</th>
+                    <th>Réponses</th>
+                    <th>Vues</th>
+                    <th>Dernier message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->paginator as $topic): ?>
+                    <tr class="<?= $topic->getIsPinned() ? 'pinned' : '' ?>">
+                        <td>
+                            <?php if ($topic->getIsPinned()): ?>
+                                <strong>[Épinglé]</strong>
+                            <?php endif; ?>
+                            <a href="<?= $this->url('forum/topic', ['id' => $topic->getId()]) ?>">
+                                <?= $this->escapeHtml($topic->getTitle()) ?>
+                            </a>
+                        </td>
+                        <td><?= $topic->getUser() ? $this->escapeHtml($topic->getUser()->getFullName()) : 'Utilisateur inconnu' ?></td>
+                        <td><?= $topic->getRepliesCount() ?></td>
+                        <td><?= $topic->getViews() ?></td>
+                        <td>
+                            <?php if ($topic->getLastReplyAt()): ?>
+                                <?= $topic->getLastReplyAt()->format('d/m/Y H:i') ?>
+                                <?php if ($topic->getLastReplyUser()): ?>
+                                    <br><small>par <?= $topic->getLastReplyUser() ? $this->escapeHtml($topic->getLastReplyUser()->getFullName()) : 'Utilisateur inconnu' ?></small>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <?= $topic->getCreatedAt()->format('d/m/Y H:i') ?>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <?php if ($this->paginator->count() > 1): ?>
+            <div class="pagination">
+                <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'forum/category', 'params' => ['slug' => $this->category->getSlug()]]) ?>
+            </div>
+        <?php endif; ?>
+    <?php else: ?>
+        <p>Aucun sujet dans cette catégorie.</p>
+    <?php endif; ?>
+</div>
+

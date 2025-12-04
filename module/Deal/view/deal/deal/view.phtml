@@ -32,7 +32,7 @@
         <?php if ($this->deal->getLocation()): ?>
             <p><strong>Localisation:</strong> <?= $this->escapeHtml($this->deal->getLocation()) ?></p>
         <?php endif; ?>
-        <p><strong>Publié le:</strong> <?= $this->deal->getPublishedAt()->format('d/m/Y à H:i') ?></p>
+        <p><strong>Publié le:</strong> <?= $this->deal->getPublishedAt() ? $this->deal->getPublishedAt()->format('d/m/Y à H:i') : 'Non publié' ?></p>
         <p><strong>Vues:</strong> <?= $this->deal->getViews() ?></p>
     </div>
 </div>
@@ -51,7 +51,7 @@
         <h2 class="card-title">Contact</h2>
     </div>
     <div class="card-body">
-        <p><strong>Publié par:</strong> <?= $this->escapeHtml($this->deal->getUser()->getFullName()) ?></p>
+        <p><strong>Publié par:</strong> <?= $this->deal->getUser() ? $this->escapeHtml($this->deal->getUser()->getFullName()) : 'Utilisateur inconnu' ?></p>
         <p><a href="<?= $this->url('message/create', ['deal_id' => $this->deal->getId()]) ?>" class="btn btn-primary">Contacter l'annonceur</a></p>
     </div>
 </div>

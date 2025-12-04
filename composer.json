@@ -42,7 +42,8 @@
             "User\\": "module/User/src/",
             "Deal\\": "module/Deal/src/",
             "Message\\": "module/Message/src/",
-            "Admin\\": "module/Admin/src/"
+            "Admin\\": "module/Admin/src/",
+            "Forum\\": "module/Forum/src/"
         }
     },
     "scripts": {

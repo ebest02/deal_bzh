@@ -1,9 +1,6 @@
 <?php
 
-namespace Application;
-
-use Laminas\Mvc\MvcEvent;
-use Laminas\Session\SessionManager;
+namespace Forum;
 
 class Module
 {
@@ -39,17 +36,5 @@ class Module
         
         return $config;
     }
-
-    public function onBootstrap(MvcEvent $e): void
-    {
-        $application = $e->getApplication();
-        $serviceManager = $application->getServiceManager();
-        
-        // Initialiser la session si disponible
-        try {
-            $sessionManager = $serviceManager->get(SessionManager::class);
-        } catch (\Exception $e) {
-            // Session non disponible, continuer sans
-        }
-    }
 }
+
