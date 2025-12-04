@@ -38,6 +38,7 @@ return [
     'service_manager' => [
         'factories' => [
             \Laminas\Session\SessionManager::class => \Laminas\Session\Service\SessionManagerFactory::class,
+            \Application\Service\Logger::class => \Application\Service\Factory\LoggerFactory::class,
         ],
     ],
 ];

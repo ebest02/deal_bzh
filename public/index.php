@@ -5,6 +5,19 @@ use Laminas\Stdlib\ArrayUtils;
 
 chdir(dirname(__DIR__));
 
+// Configuration des logs PHP
+$logDir = __DIR__ . '/../logs';
+if (!is_dir($logDir)) {
+    mkdir($logDir, 0755, true);
+}
+
+// Rediriger toutes les erreurs PHP vers le fichier de log
+ini_set('log_errors', '1');
+ini_set('error_log', $logDir . '/error.log');
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+error_reporting(E_ALL);
+
 if (file_exists('vendor/autoload.php')) {
     require_once 'vendor/autoload.php';
 } else {

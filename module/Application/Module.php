@@ -51,5 +51,56 @@ class Module
         } catch (\Exception $e) {
             // Session non disponible, continuer sans
         }
+        
+        // Capturer les erreurs et exceptions
+        $eventManager = $application->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onDispatchError']);
+        $eventManager->attach(MvcEvent::EVENT_RENDER_ERROR, [$this, 'onRenderError']);
+    }
+    
+    public function onDispatchError(MvcEvent $e): void
+    {
+        $exception = $e->getParam('exception');
+        if ($exception) {
+            $this->logError($e->getApplication()->getServiceManager(), $exception);
+        }
+    }
+    
+    public function onRenderError(MvcEvent $e): void
+    {
+        $exception = $e->getParam('exception');
+        if ($exception) {
+            $this->logError($e->getApplication()->getServiceManager(), $exception);
+        }
+    }
+    
+    protected function logError($serviceManager, $exception): void
+    {
+        try {
+            if ($serviceManager->has(\Application\Service\Logger::class)) {
+                $logger = $serviceManager->get(\Application\Service\Logger::class);
+                $logger->logException($exception);
+            } else {
+                // Logger direct si le service n'est pas disponible
+                $logFile = __DIR__ . '/../../logs/app.log';
+                $message = sprintf(
+                    "[%s] [ERROR] Exception: %s in %s:%d - %s\n%s\n",
+                    date('Y-m-d H:i:s'),
+                    get_class($exception),
+                    $exception->getFile(),
+                    $exception->getLine(),
+                    $exception->getMessage(),
+                    $exception->getTraceAsString()
+                );
+                file_put_contents($logFile, $message, FILE_APPEND | LOCK_EX);
+            }
+        } catch (\Exception $e) {
+            // Si le logger échoue, on écrit directement dans le fichier d'erreur PHP
+            error_log(sprintf(
+                'Logger error: %s - Original exception: %s',
+                $e->getMessage(),
+                $exception->getMessage()
+            ));
+        }
     }
 }

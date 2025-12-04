@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TopicControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $topicService = $container->get(\Forum\Service\TopicService::class);
         $postService = $container->get(\Forum\Service\PostService::class);
