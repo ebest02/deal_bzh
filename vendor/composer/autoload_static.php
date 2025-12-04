@@ -32,7 +32,6 @@ class ComposerStaticInit073c916bf648d1a8311efa07d1dc6908
         'P' => 
         array (
             'Psr\\SimpleCache\\' => 16,
-            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
             'Psr\\Clock\\' => 10,
@@ -41,7 +40,6 @@ class ComposerStaticInit073c916bf648d1a8311efa07d1dc6908
         ),
         'M' => 
         array (
-            'Monolog\\' => 8,
             'Message\\' => 8,
         ),
         'L' => 
@@ -122,10 +120,6 @@ class ComposerStaticInit073c916bf648d1a8311efa07d1dc6908
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'Psr\\Log\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/src',
-        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
@@ -145,10 +139,6 @@ class ComposerStaticInit073c916bf648d1a8311efa07d1dc6908
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
-        ),
-        'Monolog\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Message\\' => 
         array (
