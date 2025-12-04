@@ -19,9 +19,16 @@
 
     <div class="cta">
         <a href="<?= $this->url('deal') ?>" class="btn btn-primary">Voir les annonces</a>
-        <?php if (!$this->identity()): ?>
+        <?php 
+        try {
+            if (!$this->identity()): ?>
+                <a href="<?= $this->url('user/register') ?>" class="btn btn-secondary">Créer un compte</a>
+            <?php endif;
+        } catch (\Exception $e) {
+            // AuthenticationService non disponible, afficher le lien d'inscription
+            ?>
             <a href="<?= $this->url('user/register') ?>" class="btn btn-secondary">Créer un compte</a>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 </div>
 

@@ -3,7 +3,7 @@
 return [
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
+            \Application\Controller\IndexController::class => \Application\Controller\Factory\IndexControllerFactory::class,
         ],
     ],
     'router' => [
@@ -13,7 +13,7 @@ return [
                 'options' => [
                     'route' => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => \Application\Controller\IndexController::class,
                         'action' => 'index',
                     ],
                 ],

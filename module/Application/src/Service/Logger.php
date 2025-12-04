@@ -7,7 +7,7 @@ class Logger
     protected $logFile;
     protected $errorLogFile;
 
-    public function __construct(string $logFile = null, string $errorLogFile = null)
+    public function __construct(?string $logFile = null, ?string $errorLogFile = null)
     {
         $baseDir = dirname(dirname(dirname(dirname(__DIR__))));
         $this->logFile = $logFile ?? $baseDir . '/logs/app.log';
