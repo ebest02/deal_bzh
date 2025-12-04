@@ -9,6 +9,7 @@ class Module
 {
     public function getConfig(): array
     {
+<<<<<<< HEAD
         $configFile = __DIR__ . '/config/module.config.php';
         if (!file_exists($configFile)) {
             throw new \RuntimeException(
@@ -22,6 +23,9 @@ class Module
             );
         }
         return $config;
+=======
+        return include __DIR__ . '/config/module.config.php';
+>>>>>>> ba7dd9a (issues solved)
     }
 
     public function onBootstrap(MvcEvent $e): void
