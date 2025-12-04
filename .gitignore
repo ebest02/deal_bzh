@@ -1,0 +1,47 @@
+# Fichiers de configuration sensibles
+.env
+.env.local
+.env.*.local
+
+# Dépendances
+/vendor/
+/node_modules/
+
+# Logs
+/logs/*
+!/logs/.gitkeep
+*.log
+
+# Cache
+/data/cache/*
+!/data/cache/.gitkeep
+
+# Uploads
+/data/uploads/*
+!/data/uploads/.gitkeep
+
+# IDE
+/.idea/
+/.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+/public/tests/
+
+# Kubernetes secrets
+/kubernetes/secret.yaml
+
+# Composer
+composer.phar
+composer.lock
+
+# Build
+/dist/
+/build/
+
