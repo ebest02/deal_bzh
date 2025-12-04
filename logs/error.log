@@ -1,1 +1,3 @@
 
+[04-Dec-2025 21:47:21 UTC] PHP Deprecated:  Application\Service\Logger::__construct(): Implicitly marking parameter $logFile as nullable is deprecated, the explicit nullable type must be used instead in /var/www/deal.bzh/web/module/Application/src/Service/Logger.php on line 10
+[04-Dec-2025 21:47:21 UTC] PHP Deprecated:  Application\Service\Logger::__construct(): Implicitly marking parameter $errorLogFile as nullable is deprecated, the explicit nullable type must be used instead in /var/www/deal.bzh/web/module/Application/src/Service/Logger.php on line 10
