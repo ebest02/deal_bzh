@@ -1,0 +1,28 @@
+<h1><?= $this->escapeHtml($this->message->getSubject()) ?></h1>
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>De:</strong> <?= $this->escapeHtml($this->message->getFromUser()->getFullName()) ?></p>
+        <p><strong>À:</strong> <?= $this->escapeHtml($this->message->getToUser()->getFullName()) ?></p>
+        <p><strong>Date:</strong> <?= $this->message->getCreatedAt()->format('d/m/Y à H:i') ?></p>
+        <?php if ($this->message->getDeal()): ?>
+            <p><strong>Annonce:</strong> <a href="<?= $this->url('deal/view', ['id' => $this->message->getDealId()]) ?>">Voir l'annonce</a></p>
+        <?php endif; ?>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Message</h2>
+    </div>
+    <div class="card-body">
+        <p><?= nl2br($this->escapeHtml($this->message->getContent())) ?></p>
+    </div>
+</div>
+
+<?php if ($this->message->getToUserId() === $this->identity()->getId()): ?>
+    <p><a href="<?= $this->url('message/reply', ['id' => $this->message->getId()]) ?>" class="btn btn-primary">Répondre</a></p>
+<?php endif; ?>
+
+<p><a href="<?= $this->url('message') ?>">Retour aux messages</a></p>
+

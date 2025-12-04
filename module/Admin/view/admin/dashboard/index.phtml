@@ -1,0 +1,51 @@
+<h1>Tableau de bord</h1>
+
+<div class="stats">
+    <div class="stat-box">
+        <h2>Utilisateurs</h2>
+        <p class="stat-number"><?= $this->totalUsers ?></p>
+    </div>
+    <div class="stat-box">
+        <h2>Annonces totales</h2>
+        <p class="stat-number"><?= $this->totalDeals ?></p>
+    </div>
+    <div class="stat-box">
+        <h2>Annonces publiées</h2>
+        <p class="stat-number"><?= $this->publishedDeals ?></p>
+    </div>
+    <div class="stat-box">
+        <h2>Annonces en brouillon</h2>
+        <p class="stat-number"><?= $this->draftDeals ?></p>
+    </div>
+    <div class="stat-box">
+        <h2>Messages</h2>
+        <p class="stat-number"><?= $this->totalMessages ?></p>
+    </div>
+</div>
+
+<h2>Annonces récentes</h2>
+<div class="recent-deals">
+    <?php foreach ($this->recentDeals as $deal): ?>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <a href="<?= $this->url('admin/deals/view', ['id' => $deal->getId()]) ?>">
+                        <?= $this->escapeHtml($deal->getTitle()) ?>
+                    </a>
+                </h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Statut:</strong> <?= $this->escapeHtml($deal->getStatus()) ?></p>
+                <p><strong>Publié le:</strong> <?= $deal->getPublishedAt() ? $deal->getPublishedAt()->format('d/m/Y') : 'Non publié' ?></p>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="admin-links">
+    <a href="<?= $this->url('admin/users') ?>" class="btn btn-primary">Gérer les utilisateurs</a>
+    <a href="<?= $this->url('admin/deals') ?>" class="btn btn-primary">Modérer les annonces</a>
+    <a href="<?= $this->url('admin/messages') ?>" class="btn btn-primary">Voir les messages</a>
+    <a href="<?= $this->url('admin/categories') ?>" class="btn btn-primary">Gérer les catégories</a>
+</div>
+

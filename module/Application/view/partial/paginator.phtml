@@ -1,0 +1,25 @@
+<?php
+$route = $this->route ?? 'deal';
+$params = $this->params ?? [];
+?>
+
+<?php if ($this->pageCount): ?>
+    <div class="pagination">
+        <?php if (isset($this->previous)): ?>
+            <a href="<?= $this->url($route, array_merge($params, ['page' => $this->previous])) ?>">&laquo; Précédent</a>
+        <?php endif; ?>
+
+        <?php foreach ($this->pagesInRange as $page): ?>
+            <?php if ($page != $this->current): ?>
+                <a href="<?= $this->url($route, array_merge($params, ['page' => $page])) ?>"><?= $page ?></a>
+            <?php else: ?>
+                <span class="current"><?= $page ?></span>
+            <?php endif; ?>
+        <?php endforeach; ?>
+
+        <?php if (isset($this->next)): ?>
+            <a href="<?= $this->url($route, array_merge($params, ['page' => $this->next])) ?>">Suivant &raquo;</a>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
+

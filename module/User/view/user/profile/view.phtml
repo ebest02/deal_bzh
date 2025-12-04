@@ -1,0 +1,23 @@
+<h1>Profil de <?= $this->escapeHtml($this->user->getFullName()) ?></h1>
+
+<div class="card">
+    <div class="card-body">
+        <p><strong>Email:</strong> <?= $this->escapeHtml($this->user->getEmail()) ?></p>
+        <?php if ($this->user->getFirstName()): ?>
+            <p><strong>Prénom:</strong> <?= $this->escapeHtml($this->user->getFirstName()) ?></p>
+        <?php endif; ?>
+        <?php if ($this->user->getLastName()): ?>
+            <p><strong>Nom:</strong> <?= $this->escapeHtml($this->user->getLastName()) ?></p>
+        <?php endif; ?>
+        <?php if ($this->user->getPhone()): ?>
+            <p><strong>Téléphone:</strong> <?= $this->escapeHtml($this->user->getPhone()) ?></p>
+        <?php endif; ?>
+        <p><strong>Note:</strong> <?= number_format($this->user->getRating(), 2) ?> / 5.00 (<?= $this->user->getRatingCount() ?> avis)</p>
+        <p><strong>Membre depuis:</strong> <?= $this->user->getCreatedAt()->format('d/m/Y') ?></p>
+    </div>
+</div>
+
+<?php if ($this->identity() && $this->identity()->getId() === $this->user->getId()): ?>
+    <p><a href="<?= $this->url('user/edit-profile') ?>" class="btn btn-primary">Modifier mon profil</a></p>
+<?php endif; ?>
+

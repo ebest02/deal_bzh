@@ -1,0 +1,68 @@
+<h1>Catégorie: <?= $this->escapeHtml($this->category->getName()) ?></h1>
+
+<?php if ($this->category->getDescription()): ?>
+    <p><?= $this->escapeHtml($this->category->getDescription()) ?></p>
+<?php endif; ?>
+
+<div class="filters">
+    <form method="get" action="<?= $this->url('category', ['slug' => $this->category->getSlug()]) ?>">
+        <div class="form-group">
+            <label>Recherche</label>
+            <input type="text" name="search" value="<?= $this->escapeHtml($this->filters['search'] ?? '') ?>" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Type</label>
+            <select name="type" class="form-control">
+                <option value="">Tous</option>
+                <option value="exchange" <?= ($this->filters['type'] == 'exchange') ? 'selected' : '' ?>>Échange</option>
+                <option value="swap" <?= ($this->filters['type'] == 'swap') ? 'selected' : '' ?>>Troc</option>
+                <option value="free_service" <?= ($this->filters['type'] == 'free_service') ? 'selected' : '' ?>>Service gratuit</option>
+                <option value="sale" <?= ($this->filters['type'] == 'sale') ? 'selected' : '' ?>>Vente</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Filtrer</button>
+    </form>
+</div>
+
+<div class="deals-list">
+    <?php if (count($this->paginator) > 0): ?>
+        <?php foreach ($this->paginator as $deal): ?>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <a href="<?= $this->url('deal/view', ['id' => $deal->getId()]) ?>">
+                            <?= $this->escapeHtml($deal->getTitle()) ?>
+                        </a>
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <p><?= $this->escapeHtml(mb_substr($deal->getDescription(), 0, 200)) ?>...</p>
+                    <p><strong>Type:</strong> 
+                        <?php
+                        $types = [
+                            'exchange' => 'Échange',
+                            'swap' => 'Troc',
+                            'free_service' => 'Service gratuit',
+                            'sale' => 'Vente',
+                        ];
+                        echo $types[$deal->getType()] ?? $deal->getType();
+                        ?>
+                    </p>
+                    <?php if ($deal->getPrice()): ?>
+                        <p><strong>Prix:</strong> <?= number_format($deal->getPrice(), 2) ?> €</p>
+                    <?php endif; ?>
+                    <p><small>Publié le <?= $deal->getPublishedAt()->format('d/m/Y') ?></small></p>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+        <?php if ($this->paginator->count() > 1): ?>
+            <div class="pagination">
+                <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'category', 'params' => ['slug' => $this->category->getSlug()]]) ?>
+            </div>
+        <?php endif; ?>
+    <?php else: ?>
+        <p>Aucune annonce trouvée dans cette catégorie.</p>
+    <?php endif; ?>
+</div>
+

@@ -1,0 +1,25 @@
+<h1>Catégories</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Slug</th>
+            <th>Description</th>
+            <th>Active</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->categories as $category): ?>
+            <tr>
+                <td><?= $category->getId() ?></td>
+                <td><?= $this->escapeHtml($category->getName()) ?></td>
+                <td><?= $this->escapeHtml($category->getSlug()) ?></td>
+                <td><?= $this->escapeHtml($category->getDescription() ?? '') ?></td>
+                <td><?= $category->getIsActive() ? 'Oui' : 'Non' ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+

@@ -1,0 +1,59 @@
+<h1>Inscription</h1>
+
+<?php if ($this->flashMessenger()->hasMessages()): ?>
+    <div class="alert alert-error">
+        <?php foreach ($this->flashMessenger()->getMessages() as $message): ?>
+            <p><?= $this->escapeHtml($message) ?></p>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+<?php
+$form = $this->form;
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('email')) ?>
+    <?= $this->formEmail($form->get('email')) ?>
+    <?= $this->formElementErrors($form->get('email')) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('password')) ?>
+    <?= $this->formPassword($form->get('password')) ?>
+    <?= $this->formElementErrors($form->get('password')) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('password_confirm')) ?>
+    <?= $this->formPassword($form->get('password_confirm')) ?>
+    <?= $this->formElementErrors($form->get('password_confirm')) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('first_name')) ?>
+    <?= $this->formText($form->get('first_name')) ?>
+    <?= $this->formElementErrors($form->get('first_name')) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('last_name')) ?>
+    <?= $this->formText($form->get('last_name')) ?>
+    <?= $this->formElementErrors($form->get('last_name')) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('phone')) ?>
+    <?= $this->formText($form->get('phone')) ?>
+    <?= $this->formElementErrors($form->get('phone')) ?>
+</div>
+
+<?= $this->formHidden($form->get('csrf')) ?>
+<?= $this->formSubmit($form->get('submit')) ?>
+
+<?= $this->form()->closeTag() ?>
+
+<p><a href="<?= $this->url('user/login') ?>">Déjà un compte ? Connectez-vous</a></p>
+

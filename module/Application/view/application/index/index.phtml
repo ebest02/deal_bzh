@@ -1,0 +1,27 @@
+<div class="home-page">
+    <h1>Bienvenue sur DEAL.BZH</h1>
+    <p class="lead">Plateforme d'échange et de partage de matériel de sonorisation, vidéo, informatique old school et plus encore.</p>
+    
+    <div class="features">
+        <div class="feature-box">
+            <h2>Échange</h2>
+            <p>Échangez votre matériel avec d'autres passionnés</p>
+        </div>
+        <div class="feature-box">
+            <h2>Troc</h2>
+            <p>Faites des trocs de matériel</p>
+        </div>
+        <div class="feature-box">
+            <h2>Services gratuits</h2>
+            <p>Partagez vos services gratuitement</p>
+        </div>
+    </div>
+
+    <div class="cta">
+        <a href="<?= $this->url('deal') ?>" class="btn btn-primary">Voir les annonces</a>
+        <?php if (!$this->identity()): ?>
+            <a href="<?= $this->url('user/register') ?>" class="btn btn-secondary">Créer un compte</a>
+        <?php endif; ?>
+    </div>
+</div>
+

@@ -1,0 +1,41 @@
+<h1>Nouveau message</h1>
+
+<?php
+$form = $this->form;
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+
+<?php if ($form->getMessages()): ?>
+    <div class="form-errors">
+        <ul>
+            <?php foreach ($form->getMessages() as $element => $messages): ?>
+                <?php foreach ($messages as $message): ?>
+                    <li><?= $this->escapeHtml($message) ?></li>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+<?= $this->formHidden($form->get('to_user_id')) ?>
+<?= $this->formHidden($form->get('deal_id')) ?>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('subject')) ?>
+    <?= $this->formText($form->get('subject')) ?>
+    <?= $this->formElementErrors($form->get('subject')) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('content')) ?>
+    <?= $this->formTextarea($form->get('content')) ?>
+    <?= $this->formElementErrors($form->get('content')) ?>
+</div>
+
+<?= $this->formHidden($form->get('csrf')) ?>
+<?= $this->formSubmit($form->get('submit')) ?>
+<a href="<?= $this->url('message') ?>" class="btn btn-secondary">Annuler</a>
+
+<?= $this->form()->closeTag() ?>
+

@@ -1,0 +1,53 @@
+<h1>Mes messages</h1>
+
+<div class="message-tabs">
+    <a href="<?= $this->url('message', [], ['query' => ['type' => 'received']]) ?>" class="btn <?= $this->type === 'received' ? 'btn-primary' : 'btn-secondary' ?>">
+        Reçus <?= $this->type === 'received' && $this->unreadCount > 0 ? '(' . $this->unreadCount . ')' : '' ?>
+    </a>
+    <a href="<?= $this->url('message', [], ['query' => ['type' => 'sent']]) ?>" class="btn <?= $this->type === 'sent' ? 'btn-primary' : 'btn-secondary' ?>">
+        Envoyés
+    </a>
+</div>
+
+<?php if (count($this->messages) > 0): ?>
+    <table>
+        <thead>
+            <tr>
+                <th><?= $this->type === 'received' ? 'De' : 'À' ?></th>
+                <th>Sujet</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->messages as $message): ?>
+                <tr class="<?= !$message->getIsRead() && $this->type === 'received' ? 'unread' : '' ?>">
+                    <td>
+                        <?php if ($this->type === 'received'): ?>
+                            <?= $this->escapeHtml($message->getFromUser()->getFullName()) ?>
+                        <?php else: ?>
+                            <?= $this->escapeHtml($message->getToUser()->getFullName()) ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <a href="<?= $this->url('message/view', ['id' => $message->getId()]) ?>">
+                            <?= $this->escapeHtml($message->getSubject()) ?>
+                        </a>
+                    </td>
+                    <td><?= $message->getCreatedAt()->format('d/m/Y H:i') ?></td>
+                    <td>
+                        <a href="<?= $this->url('message/view', ['id' => $message->getId()]) ?>">Voir</a>
+                        <?php if ($this->type === 'received'): ?>
+                            | <a href="<?= $this->url('message/reply', ['id' => $message->getId()]) ?>">Répondre</a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <p>Aucun message.</p>
+<?php endif; ?>
+
+<p><a href="<?= $this->url('message/create') ?>" class="btn btn-primary">Nouveau message</a></p>
+

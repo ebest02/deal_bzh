@@ -22,8 +22,7 @@
         "laminas/laminas-cache": "^3.0",
         "laminas/laminas-cache-storage-adapter-filesystem": "^2.0",
         "laminas/laminas-i18n": "^2.20",
-        "laminas/laminas-router": "^3.11",
-        "monolog/monolog": "^3.9"
+        "laminas/laminas-router": "^3.11"
     },
     "require-dev": {
         "laminas/laminas-development-mode": "^3.9"
@@ -31,9 +30,6 @@
     "config": {
         "allow-plugins": {
             "laminas/laminas-component-installer": true
-        },
-        "platform": {
-            "php": "8.3.0"
         },
         "platform-check": false
     },
@@ -53,3 +49,4 @@
         "development-status": "laminas-development-mode status"
     }
 }
+

@@ -1,0 +1,35 @@
+<h1>Connexion</h1>
+
+<?php if ($this->flashMessenger()->hasMessages()): ?>
+    <div class="alert alert-error">
+        <?php foreach ($this->flashMessenger()->getMessages() as $message): ?>
+            <p><?= $this->escapeHtml($message) ?></p>
+        <?php endforeach; ?>
+    </div>
+<?php endif; ?>
+
+<?php
+$form = $this->form;
+$form->prepare();
+echo $this->form()->openTag($form);
+?>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('email')) ?>
+    <?= $this->formEmail($form->get('email')) ?>
+    <?= $this->formElementErrors($form->get('email')) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($form->get('password')) ?>
+    <?= $this->formPassword($form->get('password')) ?>
+    <?= $this->formElementErrors($form->get('password')) ?>
+</div>
+
+<?= $this->formHidden($form->get('csrf')) ?>
+<?= $this->formSubmit($form->get('submit')) ?>
+
+<?= $this->form()->closeTag() ?>
+
+<p><a href="<?= $this->url('user/register') ?>">Pas encore de compte ? Inscrivez-vous</a></p>
+
