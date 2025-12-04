@@ -9,10 +9,6 @@ class Module
 {
     public function getConfig(): array
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1ae6311 (update decembre)
         $configFile = __DIR__ . '/config/module.config.php';
         if (!file_exists($configFile)) {
             throw new \RuntimeException(
@@ -26,12 +22,6 @@ class Module
             );
         }
         return $config;
-<<<<<<< HEAD
-=======
-        return include __DIR__ . '/config/module.config.php';
->>>>>>> ba7dd9a (issues solved)
-=======
->>>>>>> 1ae6311 (update decembre)
     }
 
     public function onBootstrap(MvcEvent $e): void
@@ -43,4 +33,3 @@ class Module
         $sessionManager = $serviceManager->get(SessionManager::class);
     }
 }
-
