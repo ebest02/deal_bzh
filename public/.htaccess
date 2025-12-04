@@ -1,7 +1,11 @@
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} -s [OR]
-RewriteCond %{REQUEST_FILENAME} -l [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^.*$ - [NC,L]
+
+# Ne pas réécrire si le fichier existe
+RewriteCond %{REQUEST_FILENAME} !-f
+# Ne pas réécrire si le répertoire existe
+RewriteCond %{REQUEST_FILENAME} !-d
+# Ne pas réécrire pour les fichiers statiques
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ [NC]
+# Réécrire toutes les autres requêtes vers index.php
 RewriteRule ^.*$ index.php [NC,L]
 

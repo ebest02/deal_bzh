@@ -48,6 +48,7 @@ jobs:
           type=raw,value=latest,enable={{is_default_branch}}
 
     - name: Build and push Docker image
+      id: build
       uses: docker/build-push-action@v5
       with:
         context: .
@@ -56,9 +57,21 @@ jobs:
         labels: ${{ steps.meta.outputs.labels }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        file: ./Dockerfile
 
     - name: Output image digest
       run: echo "Image pushed with digest: ${{ steps.build.outputs.digest }}"
+      
+    - name: Set image tag output
+      id: image
+      run: |
+        # Utiliser le tag SHA pour la version
+        IMAGE_TAG="${{ github.sha }}"
+        IMAGE_FULL="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
+        echo "tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+        echo "full=${IMAGE_FULL}" >> $GITHUB_OUTPUT
+        echo "Image tag: ${IMAGE_TAG}"
+        echo "Image full: ${IMAGE_FULL}"
 
   deploy:
     needs: build-and-push
