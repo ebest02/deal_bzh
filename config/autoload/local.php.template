@@ -3,17 +3,22 @@
 /**
  * Configuration locale de l'application
  * 
- * Ce fichier sera généré depuis les variables d'environnement dans Kubernetes
+ * Ce fichier utilise les variables d'environnement depuis .env
  */
+
+// Charger les variables d'environnement si disponible
+if (class_exists(\Application\Config\EnvLoader::class)) {
+    \Application\Config\EnvLoader::load();
+}
 
 return [
     'db' => [
         'driver' => 'Pdo_Mysql',
-        'database' => getenv('DB_NAME') ?: 'deal_bzh',
-        'username' => getenv('DB_USER') ?: 'deal_bzh',
-        'password' => getenv('DB_PASSWORD') ?: '',
-        'hostname' => getenv('DB_HOST') ?: 'localhost',
-        'port' => (int)(getenv('DB_PORT') ?: 3306),
+        'database' => getenv('DB_NAME') ?: $_ENV['DB_NAME'] ?? 'deal_bzh',
+        'username' => getenv('DB_USER') ?: $_ENV['DB_USER'] ?? 'deal_bzh',
+        'password' => getenv('DB_PASSWORD') ?: $_ENV['DB_PASSWORD'] ?? '',
+        'hostname' => getenv('DB_HOST') ?: $_ENV['DB_HOST'] ?? 'localhost',
+        'port' => (int)(getenv('DB_PORT') ?: $_ENV['DB_PORT'] ?? 3306),
         'charset' => 'utf8mb4',
         'options' => [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
@@ -22,8 +27,6 @@ return [
     ],
     'logging' => [
         'enabled' => true,
-        'level' => getenv('LOG_LEVEL') ?: 'INFO',
+        'level' => getenv('LOG_LEVEL') ?: $_ENV['LOG_LEVEL'] ?? 'INFO',
     ],
 ];
-
-

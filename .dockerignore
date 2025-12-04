@@ -8,5 +8,12 @@ data/cache/*
 .env
 .env.local
 composer.lock
-
-
+.idea/
+.vscode/
+*.log
+tests/
+public/tests/
+.DS_Store
+Thumbs.db
+kubernetes/
+.github/
