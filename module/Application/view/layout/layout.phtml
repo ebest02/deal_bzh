@@ -8,72 +8,108 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
 <head>
     <?= $this->headMeta() ?>
     <?= $this->headTitle() ?>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Neumorphism Bootstrap 5 -->
+    <?= $this->headLink()->prependStylesheet($this->basePath('css/neumorphism-bootstrap5.css')) ?>
+    
+    <!-- Police personnalisée -->
+    <?= $this->headLink()->prependStylesheet($this->basePath('css/fonts.css')) ?>
+    
+    <!-- Styles personnalisés combinant Neumorphism et logo -->
+    <?= $this->headLink()->prependStylesheet($this->basePath('css/deal-bzh-custom.css')) ?>
+    
+    <!-- CSS principal (adapté) -->
     <?= $this->headLink()->prependStylesheet($this->basePath('css/deal-bzh.css')) ?>
+    
     <?= $this->headScript() ?>
 </head>
-<body>
+<body class="bg-neumorphism">
     <header class="main-header">
-        <div class="container">
-            <div class="logo">
-                <a href="<?= $this->url('home') ?>">
-                    <img src="<?= $this->basePath('deal_bzh_logo-ok.svg') ?>" alt="DEAL.BZH" />
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand deal-logo-font" href="<?= $this->url('home') ?>">
+                    <img src="<?= $this->basePath('deal_bzh_logo-ok.svg') ?>" alt="DEAL.BZH" height="50" />
                 </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $this->url('home') ?>">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $this->url('deal') ?>">Annonces</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= $this->url('forum') ?>">Forum</a>
+                        </li>
+                        <?php 
+                        try {
+                            $identity = $this->identity();
+                            if ($identity): ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= $this->url('deal/create') ?>">Déposer une annonce</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= $this->url('message') ?>">Mes messages</a>
+                            </li>
+                            <?php if (method_exists($identity, 'isAdmin') && $identity->isAdmin()): ?>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="<?= $this->url('admin') ?>">Administration</a>
+                                </li>
+                            <?php endif; ?>
+                        <?php 
+                            endif;
+                        } catch (\Exception $e) {
+                            // AuthenticationService non disponible, continuer sans menu utilisateur
+                        }
+                        ?>
+                    </ul>
+                    <div class="d-flex align-items-center gap-2">
+                        <?php 
+                        try {
+                            $identity = $this->identity();
+                            if ($identity): ?>
+                                <span class="navbar-text me-3"><?= $this->escapeHtml(method_exists($identity, 'getEmail') ? $identity->getEmail() : 'Utilisateur') ?></span>
+                                <a class="btn btn-outline-secondary" href="<?= $this->url('user/logout') ?>">Déconnexion</a>
+                            <?php else: ?>
+                                <a class="btn btn-outline-secondary" href="<?= $this->url('user/login') ?>">Connexion</a>
+                                <a class="btn btn-secondary" href="<?= $this->url('user/register') ?>">Inscription</a>
+                            <?php endif;
+                        } catch (\Exception $e) {
+                            // AuthenticationService non disponible, afficher les liens de connexion
+                            ?>
+                            <a class="btn btn-outline-secondary" href="<?= $this->url('user/login') ?>">Connexion</a>
+                            <a class="btn btn-secondary" href="<?= $this->url('user/register') ?>">Inscription</a>
+                        <?php } ?>
+                    </div>
+                </div>
             </div>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="<?= $this->url('home') ?>">Accueil</a></li>
-                    <li><a href="<?= $this->url('deal') ?>">Annonces</a></li>
-                    <li><a href="<?= $this->url('forum') ?>">Forum</a></li>
-                    <?php 
-                    try {
-                        $identity = $this->identity();
-                        if ($identity): ?>
-                        <li><a href="<?= $this->url('deal/create') ?>">Déposer une annonce</a></li>
-                        <li><a href="<?= $this->url('message') ?>">Mes messages</a></li>
-                        <?php if (method_exists($identity, 'isAdmin') && $identity->isAdmin()): ?>
-                            <li><a href="<?= $this->url('admin') ?>">Administration</a></li>
-                        <?php endif; ?>
-                    <?php 
-                        endif;
-                    } catch (\Exception $e) {
-                        // AuthenticationService non disponible, continuer sans menu utilisateur
-                    }
-                    ?>
-                </ul>
-            </nav>
-            <div class="user-menu">
-                <?php 
-                try {
-                    $identity = $this->identity();
-                    if ($identity): ?>
-                        <span class="user-name"><?= $this->escapeHtml(method_exists($identity, 'getEmail') ? $identity->getEmail() : 'Utilisateur') ?></span>
-                        <a href="<?= $this->url('user/logout') ?>">Déconnexion</a>
-                    <?php else: ?>
-                        <a href="<?= $this->url('user/login') ?>">Connexion</a>
-                        <a href="<?= $this->url('user/register') ?>">Inscription</a>
-                    <?php endif;
-                } catch (\Exception $e) {
-                    // AuthenticationService non disponible, afficher les liens de connexion
-                    ?>
-                    <a href="<?= $this->url('user/login') ?>">Connexion</a>
-                    <a href="<?= $this->url('user/register') ?>">Inscription</a>
-                <?php } ?>
-            </div>
-        </div>
+        </nav>
     </header>
 
-    <main class="main-content">
+    <main class="main-content py-4">
         <div class="container">
             <?= $this->content ?>
         </div>
     </main>
 
     <footer class="main-footer">
-        <div class="container">
-            <p>&copy; <?= date('Y') ?> DEAL.BZH - Plateforme d'échange et de partage de matériel</p>
+        <div class="container py-3">
+            <p class="mb-0 text-center">&copy; <?= date('Y') ?> DEAL.BZH - Plateforme d'échange et de partage de matériel</p>
         </div>
     </footer>
 
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
     <?= $this->inlineScript() ?>
 </body>
 </html>

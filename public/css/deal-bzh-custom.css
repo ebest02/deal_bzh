@@ -1,0 +1,224 @@
+/**
+ * DEAL.BZH - Styles personnalisés combinant Neumorphism et logo
+ * Combine le style Neumorphism avec les éléments du logo (doubles barres)
+ */
+
+/* Variables combinées */
+:root {
+    /* Neumorphism */
+    --neumorphism-bg: #e6e7ee;
+    --neumorphism-shadow-light: #ffffff;
+    --neumorphism-shadow-dark: #b8b9be;
+    --neumorphism-text: #44476A;
+    --neumorphism-border: #D1D9E6;
+    
+    /* Logo (doubles barres) */
+    --logo-black: #000000;
+    --logo-white: #FFFFFF;
+    --line-width: 3px;
+    --line-spacing: 8px;
+    
+    /* Ombres Neumorphism */
+    --neumorphism-shadow-out: 6px 6px 12px var(--neumorphism-shadow-dark), -6px -6px 12px var(--neumorphism-shadow-light);
+    --neumorphism-shadow-in: inset 2px 2px 5px var(--neumorphism-shadow-dark), inset -3px -3px 7px var(--neumorphism-shadow-light);
+}
+
+/* Police personnalisée pour titres et logo */
+h1, h2, .deal-logo-font {
+    font-family: 'DealBZH', 'Nunito Sans', Arial, sans-serif;
+}
+
+/* Doubles barres - Style inspiré du logo */
+.deal-double-line {
+    border-top: var(--line-width) solid var(--logo-black);
+    position: relative;
+    margin: 1rem 0;
+}
+
+.deal-double-line::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--line-width) + var(--line-spacing));
+    left: 0;
+    right: 0;
+    height: var(--line-width);
+    background-color: var(--logo-black);
+}
+
+/* Cards avec style Neumorphism + accents logo */
+.neumorphism-card {
+    background-color: var(--neumorphism-bg);
+    border: 0.0625rem solid var(--neumorphism-border);
+    border-radius: 0.55rem;
+    box-shadow: var(--neumorphism-shadow-out);
+    padding: 1.5rem;
+    position: relative;
+}
+
+.neumorphism-card.deal-accent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--line-width);
+    background-color: var(--logo-black);
+}
+
+.neumorphism-card.deal-accent::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--line-width) + var(--line-spacing));
+    left: 0;
+    right: 0;
+    height: var(--line-width);
+    background-color: var(--logo-black);
+}
+
+/* Boutons Neumorphism avec police personnalisée */
+.neumorphism-btn {
+    background-color: var(--neumorphism-bg);
+    border: 0.0625rem solid var(--neumorphism-border);
+    border-radius: 0.55rem;
+    color: var(--neumorphism-text);
+    box-shadow: var(--neumorphism-shadow-out);
+    padding: 0.55rem 0.95rem;
+    font-family: 'DealBZH', 'Nunito Sans', Arial, sans-serif;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.neumorphism-btn:hover {
+    box-shadow: var(--neumorphism-shadow-in);
+    transform: translateY(1px);
+}
+
+.neumorphism-btn:active {
+    box-shadow: var(--neumorphism-shadow-pressed);
+    transform: translateY(2px);
+}
+
+.neumorphism-btn.deal-accent {
+    border-top: var(--line-width) solid var(--logo-black);
+    border-bottom: var(--line-width) solid var(--logo-black);
+}
+
+/* Header avec Neumorphism + logo */
+.main-header {
+    background-color: var(--neumorphism-bg);
+    box-shadow: var(--neumorphism-shadow-out);
+    border-bottom: var(--line-width) solid var(--logo-black);
+    position: relative;
+    padding: 1rem 0;
+}
+
+.main-header::after {
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * var(--line-width) - var(--line-spacing));
+    left: 0;
+    right: 0;
+    height: var(--line-width);
+    background-color: var(--logo-black);
+}
+
+.logo img {
+    filter: drop-shadow(2px 2px 4px var(--neumorphism-shadow-dark));
+}
+
+/* Navigation avec style Neumorphism */
+.main-nav a {
+    color: var(--neumorphism-text);
+    padding: 0.5rem 1rem;
+    border-radius: 0.55rem;
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.main-nav a:hover {
+    box-shadow: var(--neumorphism-shadow-in);
+    background-color: var(--neumorphism-bg);
+}
+
+/* Footer avec Neumorphism + doubles barres */
+.main-footer {
+    background-color: var(--neumorphism-bg);
+    box-shadow: var(--neumorphism-shadow-out);
+    border-top: var(--line-width) solid var(--logo-black);
+    position: relative;
+    padding: 1rem 0;
+    margin-top: auto;
+}
+
+.main-footer::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--line-width) - var(--line-spacing));
+    left: 0;
+    right: 0;
+    height: var(--line-width);
+    background-color: var(--logo-black);
+}
+
+/* Titres avec doubles barres */
+h1.deal-title {
+    border-bottom: var(--line-width) solid var(--logo-black);
+    padding-bottom: 1rem;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+h1.deal-title::after {
+    content: '';
+    position: absolute;
+    bottom: calc(-1 * var(--line-width) - var(--line-spacing));
+    left: 0;
+    right: 0;
+    height: var(--line-width);
+    background-color: var(--logo-black);
+}
+
+/* Formulaires avec Neumorphism */
+.form-group label {
+    color: var(--neumorphism-text);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Alertes avec Neumorphism + accents */
+.alert.deal-alert {
+    border-top: var(--line-width) solid var(--logo-black);
+    border-bottom: var(--line-width) solid var(--logo-black);
+}
+
+/* Pagination avec Neumorphism */
+.pagination .page-link {
+    margin: 0 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .neumorphism-card {
+        padding: 1rem;
+    }
+    
+    h1.deal-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* Animations */
+@keyframes neumorphism-press {
+    0% {
+        box-shadow: var(--neumorphism-shadow-out);
+    }
+    100% {
+        box-shadow: var(--neumorphism-shadow-in);
+    }
+}
+
+.neumorphism-press {
+    animation: neumorphism-press 0.2s ease-in-out;
+}
+

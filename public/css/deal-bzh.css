@@ -23,11 +23,11 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Nunito Sans', Arial, sans-serif;
     font-size: 16px;
     line-height: 1.6;
-    color: var(--color-black);
-    background-color: var(--color-white);
+    color: var(--neumorphism-text, #44476A);
+    background-color: var(--neumorphism-bg, #e6e7ee);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -41,12 +41,13 @@ body {
     width: 100%;
 }
 
-/* Header */
+/* Header - Compatible avec Neumorphism */
 .main-header {
-    background-color: var(--color-white);
-    border-bottom: var(--line-width) solid var(--color-black);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    border-bottom: var(--line-width) solid var(--logo-black, #000000);
     position: relative;
     padding: var(--spacing-unit) 0;
+    box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
 }
 
 .main-header::after {
@@ -126,20 +127,22 @@ body {
     font-weight: bold;
 }
 
-/* Main content */
+/* Main content - Compatible avec Neumorphism */
 .main-content {
     flex: 1;
     padding: calc(var(--spacing-unit) * 2) 0;
     min-height: calc(100vh - 200px);
+    background-color: var(--neumorphism-bg, #e6e7ee);
 }
 
-/* Footer */
+/* Footer - Compatible avec Neumorphism */
 .main-footer {
-    background-color: var(--color-white);
-    border-top: var(--line-width) solid var(--color-black);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    border-top: var(--line-width) solid var(--logo-black, #000000);
     position: relative;
     padding: var(--spacing-unit) 0;
     margin-top: auto;
+    box-shadow: -6px -6px 12px #b8b9be, 6px 6px 12px #ffffff;
 }
 
 .main-footer::before {
@@ -198,41 +201,50 @@ p {
     margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
-/* Buttons */
+/* Buttons - Compatible avec Neumorphism (utiliser .neumorphism-btn pour le style complet) */
 .btn {
     display: inline-block;
     padding: calc(var(--spacing-unit) / 2) calc(var(--spacing-unit) * 2);
     text-decoration: none;
     font-weight: bold;
-    border: var(--line-width) solid var(--color-black);
-    background-color: var(--color-white);
-    color: var(--color-black);
+    border: 0.0625rem solid var(--neumorphism-border, #D1D9E6);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    color: var(--neumorphism-text, #44476A);
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    border-radius: 0.55rem;
+    box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
 }
 
 .btn:hover {
-    background-color: var(--color-black);
-    color: var(--color-white);
+    box-shadow: inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #FFFFFF;
+    transform: translateY(1px);
+}
+
+.btn:active {
+    box-shadow: inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #FFFFFF;
+    transform: translateY(2px);
 }
 
 .btn-primary {
-    background-color: var(--color-black);
-    color: var(--color-white);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    color: var(--neumorphism-text, #44476A);
+    border-color: var(--neumorphism-border, #D1D9E6);
 }
 
 .btn-primary:hover {
-    background-color: var(--color-white);
-    color: var(--color-black);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    color: var(--neumorphism-text, #44476A);
 }
 
 .btn-secondary {
-    background-color: var(--color-white);
-    color: var(--color-black);
+    background-color: #2D4CC8;
+    color: #ECF0F3;
+    border-color: #2D4CC8;
 }
 
-/* Forms */
+/* Forms - Compatible avec Neumorphism */
 form {
     max-width: 600px;
     margin: 0 auto;
@@ -245,7 +257,8 @@ form {
 .form-group label {
     display: block;
     margin-bottom: calc(var(--spacing-unit) / 2);
-    font-weight: bold;
+    font-weight: 600;
+    color: var(--neumorphism-text, #44476A);
 }
 
 .form-group input[type="text"],
@@ -256,17 +269,21 @@ form {
 .form-group select {
     width: 100%;
     padding: calc(var(--spacing-unit) / 2);
-    border: var(--line-width) solid var(--color-black);
-    background-color: var(--color-white);
-    font-family: Arial, sans-serif;
+    border: 0.0625rem solid var(--neumorphism-border, #D1D9E6);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    font-family: 'Nunito Sans', Arial, sans-serif;
     font-size: 1rem;
+    border-radius: 0.55rem;
+    box-shadow: inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #FFFFFF;
+    color: var(--neumorphism-text, #44476A);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: var(--color-gray-dark);
+    border-color: var(--neumorphism-border, #D1D9E6);
+    box-shadow: inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #FFFFFF, 0 0 0 0.25rem rgba(209, 217, 230, 0.25);
 }
 
 .form-group textarea {
@@ -277,19 +294,24 @@ form {
 .form-control {
     width: 100%;
     padding: calc(var(--spacing-unit) / 2);
-    border: var(--line-width) solid var(--color-black);
-    background-color: var(--color-white);
-    font-family: Arial, sans-serif;
+    border: 0.0625rem solid var(--neumorphism-border, #D1D9E6);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    font-family: 'Nunito Sans', Arial, sans-serif;
     font-size: 1rem;
+    border-radius: 0.55rem;
+    box-shadow: inset 2px 2px 5px #b8b9be, inset -3px -3px 7px #FFFFFF;
+    color: var(--neumorphism-text, #44476A);
 }
 
 .form-errors {
-    color: var(--color-black);
-    background-color: var(--color-gray-light);
+    color: var(--neumorphism-text, #44476A);
+    background-color: var(--neumorphism-bg, #e6e7ee);
     padding: var(--spacing-unit);
     margin-bottom: var(--spacing-unit);
-    border: var(--line-width) solid var(--color-black);
+    border: 0.0625rem solid var(--neumorphism-border, #D1D9E6);
     position: relative;
+    border-radius: 0.55rem;
+    box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
 }
 
 .form-errors::after {
@@ -307,13 +329,15 @@ form {
     margin-left: var(--spacing-unit);
 }
 
-/* Cards */
+/* Cards - Compatible avec Neumorphism (utiliser .neumorphism-card pour le style complet) */
 .card {
-    border: var(--line-width) solid var(--color-black);
+    border: 0.0625rem solid var(--neumorphism-border, #D1D9E6);
     padding: var(--spacing-unit);
     margin-bottom: var(--spacing-unit);
-    background-color: var(--color-white);
+    background-color: var(--neumorphism-bg, #e6e7ee);
     position: relative;
+    border-radius: 0.55rem;
+    box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
 }
 
 .card::after {
@@ -446,12 +470,16 @@ table tr.unread {
     color: var(--color-white);
 }
 
-/* Alerts */
+/* Alerts - Compatible avec Neumorphism */
 .alert {
     padding: var(--spacing-unit);
     margin-bottom: var(--spacing-unit);
-    border: var(--line-width) solid var(--color-black);
+    border: 0.0625rem solid var(--neumorphism-border, #D1D9E6);
     position: relative;
+    border-radius: 0.55rem;
+    box-shadow: 6px 6px 12px #b8b9be, -6px -6px 12px #ffffff;
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    color: var(--neumorphism-text, #44476A);
 }
 
 .alert::after {
@@ -465,15 +493,18 @@ table tr.unread {
 }
 
 .alert-success {
-    background-color: var(--color-gray-light);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    border-color: #18634B;
 }
 
 .alert-error {
-    background-color: var(--color-white);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    border-color: #A91E2C;
 }
 
 .alert-info {
-    background-color: var(--color-gray-light);
+    background-color: var(--neumorphism-bg, #e6e7ee);
+    border-color: #0056B3;
 }
 
 /* Admin */

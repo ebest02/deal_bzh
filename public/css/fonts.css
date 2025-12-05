@@ -1,0 +1,28 @@
+/**
+ * DEAL.BZH - Police de caractères personnalisée
+ * Basée sur le logo avec style simple/double barres
+ */
+
+@font-face {
+    font-family: 'DealBZH';
+    src: url('../fonts/deal-bzh-font.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Variables CSS pour la police */
+:root {
+    --font-deal-bzh: 'DealBZH', 'Nunito Sans', Arial, sans-serif;
+}
+
+/* Classes utilitaires pour utiliser la police */
+.deal-logo-font {
+    font-family: var(--font-deal-bzh);
+}
+
+/* Utilisation automatique pour les titres principaux */
+h1, h2, .logo-text {
+    font-family: var(--font-deal-bzh);
+}
+
